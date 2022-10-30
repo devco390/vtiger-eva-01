@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+
+  vtiger:
+    build: .      
+    ports:
+      - "8080:80"
+    networks:
+      - dev-env
+    volumes:
+      - ./src:/var/www/html
+    links:
+      - mariadb
+
+  mariadb:
+    image: mariadb:10.9
+    command: mysqld --sql_mode="ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 'eva01'
+      MYSQL_USER: 'admin'
+      MYSQL_PASSWORD: 'admin'
+      MYSQL_DATABASE: 'vtiger-eva-01'
+    volumes:
+      - ./mysqldata:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - dev-env
+
+volumes:
+  mysqldata: {}
+  src: {}
+networks:
+  dev-env: {}
+   
+
+
+
